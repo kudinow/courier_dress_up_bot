@@ -28,16 +28,16 @@ settings = Settings()
 
 
 # Системный промпт для OpenAI - генерация промптов для курьера Яндекс Еды
-PROMPT_SYSTEM = """SYSTEM PROMPT FOR FOOD DELIVERY COURIER PHOTO GENERATION
+PROMPT_SYSTEM = """SYSTEM PROMPT FOR YANDEX.EDA COURIER PHOTO GENERATION
 ========================================================
 
-TASK: Transform user's photo into a professional food delivery courier portrait while preserving the person's facial features and identity.
+TASK: Transform user's photo into a professional Yandex.Eda delivery courier portrait while preserving the person's facial features and identity.
 
 CRITICAL UNIFORM DETAILS (MUST FOLLOW EXACTLY):
 - JACKET: Bright yellow windbreaker/jacket with dark brown/chocolate accents on shoulders and sides
-- BACKPACK: Large yellow thermal delivery backpack
+- LOGO: Black spiral Yandex.Eda logo visible on chest area
+- BACKPACK: Large yellow thermal delivery backpack with black spiral logo, worn on back
 - The uniform is YELLOW with brown accents, NOT black with yellow accents
-- NO LOGOS, NO BRANDING, NO TEXT on uniform or backpack - completely clean surfaces
 
 PHOTOGRAPHY STYLE:
 - Style: Professional lifestyle/action photography, realistic and natural
@@ -52,25 +52,24 @@ BACKGROUND SETTINGS (choose one that fits the scene):
 - Business district with glass buildings
 - Residential area with parked cars
 - Always include environmental context - buildings, vehicles, pavement
-- NO VISIBLE BRAND NAMES or company signage in background
 
 COURIER SCENARIOS (randomly vary):
 
 1. SCOOTER COURIER:
-   - Sitting on bright yellow electric scooter (no branding, no logos)
-   - Yellow thermal backpack on back (clean, no text)
+   - Sitting on bright yellow electric scooter with Yandex.Eda branding
+   - Yellow thermal backpack on back
    - Captured from elevated angle showing road/pavement patterns
    - Dynamic composition with curved roads or interesting geometry
 
 2. CAR COURIER:
-   - Standing next to or exiting a car (white/light colored vehicle, no branding)
-   - Yellow thermal backpack on shoulder or back (clean, no text)
+   - Standing next to or exiting a car (white/light colored vehicle)
+   - Yellow thermal backpack on shoulder or back
    - Urban street background with modern architecture
    - 3/4 body shot, professional delivery moment
 
 3. WALKING COURIER:
    - Walking on urban sidewalk/street
-   - Yellow backpack prominently visible (clean, no logos)
+   - Yellow backpack prominently visible
    - Modern city environment in background
    - Natural stride, professional demeanor
 
@@ -99,13 +98,13 @@ When you receive a user's photo, analyze the person's features (age, gender, eth
 
 1. Describes the person accurately based on their photo
 2. Randomly selects a courier scenario (scooter/car/walking)
-3. Specifies the exact yellow uniform with brown accents and yellow backpack (NO LOGOS)
+3. Specifies the exact yellow uniform with brown accents and yellow backpack
 4. Describes a dynamic urban setting with specific details
 5. Includes natural lighting and professional photography style
 6. Maintains variety - never generate the same composition twice
 
 EXAMPLE PROMPT STRUCTURE:
-"Professional lifestyle photograph of a [describe person from photo: age, gender, ethnicity, key facial features] as a food delivery courier. Wearing bright yellow windbreaker jacket with dark brown accents on shoulders. Large yellow thermal delivery backpack on back, clean surfaces with no logos or text. [SCENARIO: sitting on yellow electric scooter without branding / standing by white car / walking on street]. [SETTING: captured from elevated aerial angle on curved urban road / modern business district with glass buildings / residential street]. Overcast natural daylight, soft diffused lighting. Dynamic composition, professional delivery action shot. Realistic photography, vibrant yellow uniform, authentic courier moment. Wide angle perspective, environmental context visible. No visible branding, logos, or company names anywhere in the image."
+"Professional lifestyle photograph of a [describe person from photo: age, gender, ethnicity, key facial features] as a Yandex.Eda delivery courier. Wearing bright yellow windbreaker jacket with dark brown accents on shoulders, black Yandex.Eda spiral logo on chest. Large yellow thermal delivery backpack on back with black spiral logo. [SCENARIO: sitting on yellow electric scooter / standing by white car / walking on street]. [SETTING: captured from elevated aerial angle on curved urban road / modern business district with glass buildings / residential street]. Overcast natural daylight, soft diffused lighting. Dynamic composition, professional delivery action shot. Realistic photography, vibrant yellow uniform, authentic courier moment. Wide angle perspective, environmental context visible."
 
 DIVERSITY IN GENERATION:
 - Vary the camera angle (aerial, eye-level, slightly elevated)
@@ -121,13 +120,11 @@ STRICT REQUIREMENTS:
 ✓ Always use natural overcast lighting
 ✓ Always include urban environmental context
 ✓ Always maintain the person's identity from source photo
-✓ Always ensure NO LOGOS, NO BRANDING, NO TEXT visible anywhere
 ✗ Never use black uniforms
 ✗ Never use studio backgrounds
 ✗ Never create static posed portraits
 ✗ Never lose the person's facial features or identity
-✗ Never include any company logos, brand names, or text on clothing/equipment
-✗ Never show branded scooters or vehicles with visible company markings"""
+"""
 
 PROMPT_CRITICAL_SUFFIX = """CRITICAL FACE AND APPEARANCE PRESERVATION REQUIREMENTS:
 Preserve the exact facial features, face shape, skin tone, eye color, hair color, hairstyle, and all unique characteristics from the original photo. Do not alter, enhance, beautify, or modify the face in any way. Never change eye color or hair color under any circumstances. Never change the hairstyle - keep the exact hair length, style, and texture from the original photo. You may only make minor grooming improvements as if the person combed their hair, but never change short hair to long, straight to curly, or alter the fundamental hairstyle. If a man has short hair, keep it short. If a woman has long hair, keep it long. The person must be completely recognizable and identical to the uploaded image. Keep natural skin texture, wrinkles, marks, and all facial details exactly as they are.
