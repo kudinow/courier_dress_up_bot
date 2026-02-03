@@ -73,7 +73,7 @@ ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230
 # Проверить статус (найти PID)
 ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230 "ps aux | grep 'bot.main' | grep -v grep"
 
-# Остановить бота (заменить PID)
+# Остановить бота
 ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230 "pkill -f 'bot.main'"
 
 # Запустить бота
@@ -83,6 +83,27 @@ ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230 "cd /home/kudinow/bot && nohup .
 ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230 "tail -50 /home/kudinow/bot/bot.log"
 ```
 
-**Важно:** Бот запущен как обычный процесс, НЕ через systemd. Файл `photoshoot_ai.service` есть, но сервис не установлен.
+### Деплой изменений на сервер
+```bash
+# Остановить бота, синхронизировать файлы, запустить бота
+ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230 "pkill -f 'bot.main'" 2>/dev/null
+
+rsync -avz -e "ssh -i ~/.ssh/id_ed25519" \
+  --exclude 'venv' --exclude '.env' --exclude '__pycache__' \
+  --exclude '*.pyc' --exclude 'user_generations.json' \
+  "/path/to/local/project/" kudinow@89.169.181.230:/home/kudinow/bot/
+
+ssh -i ~/.ssh/id_ed25519 kudinow@89.169.181.230 \
+  "cd /home/kudinow/bot && nohup ./venv/bin/python -m bot.main > bot.log 2>&1 &"
+```
+
+**Важно:** Сервер не содержит git-репозиторий. Деплой осуществляется через rsync.
+
+## kie.ai API
+
+Параметры для генерации изображений:
+- `model`: `"google/nano-banana-edit"` - модель для редактирования изображений
+- `image_size`: `"3:4"` - соотношение сторон (вертикальный портрет)
+- Доступные значения: `1:1`, `9:16`, `16:9`, `3:4`, `4:3`, `3:2`, `2:3`, `5:4`, `4:5`, `21:9`, `auto`
 
 See [DEPLOY.md](DEPLOY.md) for full deployment instructions.
