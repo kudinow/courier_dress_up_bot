@@ -30,7 +30,7 @@ class KieClient:
         image_url: str,
         prompt: str,
         output_format: str = "jpeg",
-        image_size: str = "auto",
+        image_size: str = "3:4",
     ) -> str:
         """
         Создаёт задачу на генерацию изображения.
@@ -39,7 +39,7 @@ class KieClient:
             image_url: URL исходного изображения
             prompt: Промпт для трансформации
             output_format: Формат выхода (jpeg/png)
-            image_size: Соотношение сторон
+            image_size: Соотношение сторон (3:4 для вертикального портрета)
 
         Returns:
             str: ID созданной задачи
@@ -184,7 +184,7 @@ class KieClient:
                 "prompt": prompt,
                 "image_urls": [logo_url, image_url],
                 "output_format": "jpeg",
-                "image_size": "auto",
+                "image_size": "3:4",
             },
         }
 
@@ -212,7 +212,7 @@ class KieClient:
         image_url: str,
         prompt: str,
         output_format: str = "jpeg",
-        image_size: str = "auto",
+        image_size: str = "3:4",
     ) -> str:
         """
         Полный цикл трансформации фото: создание задачи и ожидание результата.
@@ -221,7 +221,7 @@ class KieClient:
             image_url: URL исходного изображения
             prompt: Промпт для трансформации
             output_format: Формат выхода (jpeg/png)
-            image_size: Соотношение сторон
+            image_size: Соотношение сторон (3:4 для вертикального портрета)
 
         Returns:
             str: URL готового изображения

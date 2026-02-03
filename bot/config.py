@@ -27,28 +27,29 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
-# Системный промпт для OpenAI - генерация промптов для курьера Яндекс Еды
-PROMPT_SYSTEM = """SYSTEM PROMPT FOR YANDEX.EDA COURIER PHOTO GENERATION
+# Системный промпт для OpenAI - генерация промптов для курьера (без брендинга)
+PROMPT_SYSTEM = """SYSTEM PROMPT FOR DELIVERY COURIER PHOTO GENERATION
 ========================================================
 
-TASK: Transform user's photo into a professional Yandex.Eda delivery courier portrait while preserving the person's facial features and identity.
+TASK: Transform user's photo into a professional delivery courier portrait while preserving the person's facial features and identity.
 
 CRITICAL UNIFORM DETAILS (MUST FOLLOW EXACTLY):
 - JACKET: Bright yellow windbreaker/jacket with dark brown/chocolate accents on shoulders and sides
-- LOGO: Black spiral Yandex.Eda logo visible on chest area
-- BACKPACK: Large yellow thermal delivery backpack with black spiral logo, worn on back
+- NO LOGOS OR BRANDING on the jacket - keep it plain and clean
+- BACKPACK: Large yellow thermal delivery backpack, plain without any logos or text
 - The uniform is YELLOW with brown accents, NOT black with yellow accents
+- IMPORTANT: Do not add any company logos, brand names, or text to the uniform or backpack
 
 PHOTOGRAPHY STYLE:
 - Style: Professional lifestyle/action photography, realistic and natural
-- Angles: Dynamic perspectives - aerial view, wide-angle, slightly elevated camera position
-- Framing: Full body or 3/4 body shots showing courier in action/context
+- Aspect ratio: 3:4 vertical format (taller than wide, portrait orientation)
+- Angles: Dynamic perspectives - eye-level, slightly elevated, or aerial view
+- Framing: Full body shots showing courier in action/context, person fills most of vertical frame
 - Lighting: Natural overcast daylight, soft diffused light, no harsh shadows
 - Colors: Vibrant yellows, realistic skin tones, desaturated urban backgrounds
 
 BACKGROUND SETTINGS (choose one that fits the scene):
 - Urban street with modern buildings and wet asphalt (overcast weather)
-- Circular road or roundabout (aerial perspective)
 - Business district with glass buildings
 - Residential area with parked cars
 - Always include environmental context - buildings, vehicles, pavement
@@ -56,33 +57,34 @@ BACKGROUND SETTINGS (choose one that fits the scene):
 COURIER SCENARIOS (randomly vary):
 
 1. SCOOTER COURIER:
-   - Sitting on bright yellow electric scooter with Yandex.Eda branding
-   - Yellow thermal backpack on back
-   - Captured from elevated angle showing road/pavement patterns
-   - Dynamic composition with curved roads or interesting geometry
+   - Sitting on bright yellow electric scooter (no branding, plain yellow)
+   - Yellow thermal backpack on back (no logos)
+   - Urban street or road setting
+   - Dynamic composition showing full figure on scooter
 
 2. CAR COURIER:
    - Standing next to or exiting a car (white/light colored vehicle)
-   - Yellow thermal backpack on shoulder or back
+   - Yellow thermal backpack on shoulder or back (no logos)
    - Urban street background with modern architecture
-   - 3/4 body shot, professional delivery moment
+   - Full body shot, professional delivery moment
 
 3. WALKING COURIER:
    - Walking on urban sidewalk/street
-   - Yellow backpack prominently visible
+   - Yellow backpack prominently visible (no logos)
    - Modern city environment in background
-   - Natural stride, professional demeanor
+   - Natural stride, full body visible
 
 EXPRESSION & POSE:
 - Expression: Friendly, professional, confident, slight smile or neutral
-- Gaze: Natural - either looking at camera or naturally looking away in action
+- Gaze: ALWAYS looking directly at the camera, making eye contact with viewer
 - Pose: Natural and dynamic, not stiff studio pose
 - Body language: Active, mid-movement, authentic delivery moment
 
 COMPOSITION PRINCIPLES:
-- Use rule of thirds or dynamic diagonal compositions
-- Include environmental context - don't isolate courier from surroundings
-- Show scale and perspective (aerial views work well)
+- 3:4 vertical aspect ratio - image is taller than wide (portrait orientation)
+- Full body visible in frame with small margins at top and bottom
+- Person fills most of the vertical space
+- Include environmental context - buildings, vehicles, pavement
 - Create depth with foreground/background elements
 - Emphasize the yellow uniform and backpack as key visual elements
 
@@ -98,31 +100,36 @@ When you receive a user's photo, analyze the person's features (age, gender, eth
 
 1. Describes the person accurately based on their photo
 2. Randomly selects a courier scenario (scooter/car/walking)
-3. Specifies the exact yellow uniform with brown accents and yellow backpack
+3. Specifies the exact yellow uniform with brown accents and plain yellow backpack WITHOUT ANY LOGOS
 4. Describes a dynamic urban setting with specific details
 5. Includes natural lighting and professional photography style
 6. Maintains variety - never generate the same composition twice
 
 EXAMPLE PROMPT STRUCTURE:
-"Professional lifestyle photograph of a [describe person from photo: age, gender, ethnicity, key facial features] as a Yandex.Eda delivery courier. Wearing bright yellow windbreaker jacket with dark brown accents on shoulders, black Yandex.Eda spiral logo on chest. Large yellow thermal delivery backpack on back with black spiral logo. [SCENARIO: sitting on yellow electric scooter / standing by white car / walking on street]. [SETTING: captured from elevated aerial angle on curved urban road / modern business district with glass buildings / residential street]. Overcast natural daylight, soft diffused lighting. Dynamic composition, professional delivery action shot. Realistic photography, vibrant yellow uniform, authentic courier moment. Wide angle perspective, environmental context visible."
+"Professional lifestyle photograph in 3:4 vertical aspect ratio of a [describe person from photo: age, gender, ethnicity, key facial features] as a delivery courier. Full body visible in frame, person looking directly at camera. Wearing bright yellow windbreaker jacket with dark brown accents on shoulders, no logos or branding visible. Large plain yellow thermal delivery backpack on back without any text or logos. [SCENARIO: sitting on plain yellow electric scooter / standing by white car / walking on street]. [SETTING: urban street with modern buildings / business district with glass buildings / residential street]. Overcast natural daylight, soft diffused lighting. Dynamic composition, professional delivery action shot, direct eye contact with viewer. Realistic photography, vibrant yellow uniform, authentic courier moment. 3:4 vertical format, full body framing."
 
 DIVERSITY IN GENERATION:
-- Vary the camera angle (aerial, eye-level, slightly elevated)
+- Vary the camera angle (eye-level, slightly elevated)
 - Alternate between scooter/car/walking scenarios
-- Change urban backgrounds (curved roads, straight streets, business districts)
+- Change urban backgrounds (straight streets, business districts, residential)
 - Mix activity states (sitting, standing, walking)
-- Adjust person's orientation (facing camera, 3/4 turn, profile)
-- Keep compositions fresh and dynamic
+- Adjust person's body orientation (facing camera, slight 3/4 turn) while always looking at camera
+- Keep compositions fresh and dynamic while maintaining 3:4 vertical format
 
 STRICT REQUIREMENTS:
+✓ Always use 3:4 vertical aspect ratio (taller than wide)
+✓ Always show full body in frame
+✓ Always have person looking directly at camera (eye contact)
 ✓ Always include the yellow jacket with brown accents
 ✓ Always show the yellow thermal backpack
 ✓ Always use natural overcast lighting
 ✓ Always include urban environmental context
 ✓ Always maintain the person's identity from source photo
+✓ Never add any logos, brand names, or text to uniform or backpack
 ✗ Never use black uniforms
 ✗ Never use studio backgrounds
-✗ Never create static posed portraits
+✗ Never create horizontal/landscape format images
+✗ Never have person looking away from camera
 ✗ Never lose the person's facial features or identity
 """
 
