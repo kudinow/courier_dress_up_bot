@@ -70,6 +70,9 @@ async def handle_photo(message: Message, state: FSMContext, bot: Bot) -> None:
             f"Prompt generated for user {user_id}, length: {len(prompt)}"
         )
 
+        # DEBUG: Отправляем промпт пользователю
+        await message.answer(f"🔧 DEBUG 1/4 - GPT Prompt:\n\n{prompt[:4000]}")
+
         # Получаем файл фото (берём самое большое разрешение)
         photo = message.photo[-1]
         file = await bot.get_file(photo.file_id)
@@ -90,8 +93,28 @@ async def handle_photo(message: Message, state: FSMContext, bot: Bot) -> None:
             prompt=prompt,
         )
 
+        # DEBUG: Отправляем первое изображение
+        first_image = await kie_client.download_image(result_url)
+        await message.answer_photo(
+            photo=BufferedInputFile(first_image, filename="debug_step1.jpg"),
+            caption="🔧 DEBUG 2/4 - Первое изображение от kie.ai (без логотипа)"
+        )
+
         # Второй этап: вписываем логотип на одежду
         logger.info(f"Adding logo for user {user_id}...")
+
+        # DEBUG: Отправляем промпт для логотипа
+        logo_prompt = (
+            "Replace the front face of the yellow delivery backpack with the round "
+            "Yandex Eda logo from the first reference image. The logo should cover "
+            "most of the visible backpack surface, centered, with correct perspective "
+            "matching the bag angle. Print it as if it was manufactured onto the bag "
+            "fabric. Also add the same logo on the chest area of the yellow jacket, "
+            "smaller size, as a branded uniform patch. Do not change the person, "
+            "background, or any other element."
+        )
+        await message.answer(f"🔧 DEBUG 3/4 - Logo Prompt:\n\n{logo_prompt}")
+
         final_url = await kie_client.add_logo_to_photo(result_url, LOGO_URL)
 
         # Скачиваем результат
@@ -127,7 +150,7 @@ async def handle_photo(message: Message, state: FSMContext, bot: Bot) -> None:
             photo=BufferedInputFile(
                 result_image, filename="studio_portrait.jpg"
             ),
-            caption=caption,
+            caption=f"🔧 DEBUG 4/4 - Финальное изображение\n\n{caption}",
             reply_markup=get_restart_keyboard(has_last_photo=True),
         )
 
